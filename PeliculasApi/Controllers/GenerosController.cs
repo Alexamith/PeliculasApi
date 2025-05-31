@@ -29,7 +29,7 @@ namespace PeliculasApi.Controllers
         }
 
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name = "obtenerGenero")]
         public async Task<ActionResult<GeneroDTO>> GetById(int id)
         {
             var entidad = await context.Generos.FirstOrDefaultAsync(genero => genero.Id == id);
@@ -41,6 +41,46 @@ namespace PeliculasApi.Controllers
             return dto;
         }
 
+
+        [HttpPost]
+
+        public async Task<ActionResult> Post([FromBody] GeneroCreacionDTO genero)
+        {
+            var entidad = mapper.Map<Genero>(genero);    
+            context.Add(entidad);
+            await context.SaveChangesAsync();
+            var generoDTO = mapper.Map<GeneroDTO>(entidad);
+            return new CreatedAtRouteResult("obtenerGenero", new {id = generoDTO.Id}, generoDTO);
+        }
+
+
+        [HttpPut("{id:int}")]
+
+        public async Task<ActionResult> Put(int id, [FromBody] GeneroCreacionDTO genero)
+        {
+            var entidad = mapper.Map<Genero>(genero);
+            entidad.Id = id;
+            context.Entry(entidad).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+
+        public async Task<ActionResult> Delete(int id)
+        {
+            var existe = await context.Generos.AnyAsync(x => x.Id == id);
+
+            if (!existe)
+            {
+                return NotFound();
+            }
+
+            context.Remove(new Genero {Id = id});
+            await context.SaveChangesAsync();
+
+            return NoContent();
+        }
 
     }
 }
