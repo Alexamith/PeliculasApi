@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using PeliculasApi;
 
 using AutoMapper;
+using PeliculasApi.Servicios;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 //using Microsoft.AspNetCore.Builder;
 //using Microsoft.AspNetCore.Hosting;
@@ -50,8 +51,8 @@ namespace PeliculasAPI
             services.AddSwaggerGen();
             
 
-            //services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
-            //services.AddHttpContextAccessor();
+            services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosLocal>();
+            services.AddHttpContextAccessor();
 
             //services.AddSingleton<GeometryFactory>(NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326));
 
